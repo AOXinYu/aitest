@@ -130,3 +130,40 @@ test("moving into the vacated tail cell is allowed", async () => {
     { x: 1, y: 1 },
   ]);
 });
+
+test("clearing the final open cell marks the game as won", async () => {
+  const { stepGame } = await loadSnakeCore();
+  const state = {
+    gridSize: 4,
+    snake: [
+      { x: 2, y: 3 },
+      { x: 1, y: 3 },
+      { x: 0, y: 3 },
+      { x: 0, y: 2 },
+      { x: 1, y: 2 },
+      { x: 2, y: 2 },
+      { x: 3, y: 2 },
+      { x: 3, y: 1 },
+      { x: 2, y: 1 },
+      { x: 1, y: 1 },
+      { x: 0, y: 1 },
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 2, y: 0 },
+      { x: 3, y: 0 },
+    ],
+    direction: "right",
+    queuedDirection: "right",
+    foodSeed: 0,
+    food: { x: 3, y: 3 },
+    score: 12,
+    status: "running",
+  };
+
+  const nextState = stepGame(state);
+
+  assert.equal(nextState.status, "won");
+  assert.equal(nextState.food, null);
+  assert.equal(nextState.score, 13);
+  assert.equal(nextState.snake.length, 16);
+});

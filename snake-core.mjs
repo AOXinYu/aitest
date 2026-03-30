@@ -13,22 +13,26 @@ const OPPOSITES = {
 };
 
 export const GRID_SIZE = 16;
+const MIN_GRID_SIZE = 4;
 
 export function createInitialState(gridSize = GRID_SIZE) {
+  const resolvedGridSize = Math.max(MIN_GRID_SIZE, gridSize);
+  const centerRow = Math.floor(resolvedGridSize / 2);
+  const headX = Math.max(2, Math.floor(resolvedGridSize / 2));
   const snake = [
-    { x: 7, y: 8 },
-    { x: 6, y: 8 },
-    { x: 5, y: 8 },
+    { x: headX, y: centerRow },
+    { x: headX - 1, y: centerRow },
+    { x: headX - 2, y: centerRow },
   ];
   const foodSeed = 0;
 
   return {
-    gridSize,
+    gridSize: resolvedGridSize,
     snake,
     direction: "right",
     queuedDirection: "right",
     foodSeed,
-    food: placeFood(snake, gridSize, foodSeed),
+    food: placeFood(snake, resolvedGridSize, foodSeed),
     score: 0,
     status: "running",
   };
@@ -51,7 +55,7 @@ export function queueDirection(state, nextDirection) {
 }
 
 export function togglePause(state) {
-  if (state.status === "game-over") {
+  if (isTerminalStatus(state.status)) {
     return state;
   }
 
@@ -93,6 +97,7 @@ export function stepGame(state) {
   const nextFood = ateFood
     ? placeFood(nextSnake, state.gridSize, nextFoodSeed)
     : state.food;
+  const nextStatus = nextFood ? "running" : "won";
 
   return {
     ...state,
@@ -102,6 +107,7 @@ export function stepGame(state) {
     foodSeed: nextFoodSeed,
     food: nextFood,
     score: ateFood ? state.score + 1 : state.score,
+    status: nextStatus,
   };
 }
 
@@ -126,6 +132,10 @@ export function placeFood(snake, gridSize, seed = 0) {
 
 export function positionsEqual(left, right) {
   return Boolean(left && right) && left.x === right.x && left.y === right.y;
+}
+
+export function isTerminalStatus(status) {
+  return status === "game-over" || status === "won";
 }
 
 function movePoint(point, vector) {

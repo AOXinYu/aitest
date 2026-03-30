@@ -1,0 +1,146 @@
+:root {
+  color-scheme: light;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #1a1a1a;
+  --board-size: min(78vw, 480px);
+  --cell-gap: 2px;
+  --board-bg: #d8d8d8;
+  --panel-bg: #ffffff;
+  --snake: #2e7d32;
+  --snake-head: #1b5e20;
+  --food: #c62828;
+  --cell: #f1f1f1;
+  --border: #d0d0d0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.panel {
+  width: min(100%, 540px);
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.label {
+  margin: 0 0 4px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #666666;
+  letter-spacing: 0.04em;
+}
+
+.value {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+button {
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #fafafa;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #f0f0f0;
+}
+
+.hint {
+  margin: 0 0 16px;
+  color: #555555;
+}
+
+.board {
+  width: var(--board-size);
+  height: var(--board-size);
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: repeat(16, 1fr);
+  gap: var(--cell-gap);
+  padding: var(--cell-gap);
+  background: var(--board-bg);
+  border-radius: 12px;
+}
+
+.cell {
+  background: var(--cell);
+  border-radius: 3px;
+}
+
+.cell.snake {
+  background: var(--snake);
+}
+
+.cell.head {
+  background: var(--snake-head);
+}
+
+.cell.food {
+  background: var(--food);
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 72px));
+  grid-template-areas:
+    ". up ."
+    "left down right";
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.up {
+  grid-area: up;
+}
+
+.left {
+  grid-area: left;
+}
+
+.right {
+  grid-area: right;
+}
+
+.down {
+  grid-area: down;
+}
+
+@media (min-width: 721px) {
+  .controls {
+    display: none;
+  }
+}
